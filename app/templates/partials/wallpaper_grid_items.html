@@ -13,6 +13,10 @@
         <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ wallpaper.title }}</div>
         <div class="card-meta">
             <span>{{ wallpaper.timestamp.strftime('%Y-%m-%d') }}</span>
+            <a href="{{ url_for('main.user_profile', username=wallpaper.uploader.username) }}"
+                class="{{ 'admin-username' if wallpaper.uploader.is_admin else '' }}">
+                @{{ wallpaper.uploader.username }}
+            </a>
         </div>
         {% if wallpaper.tags %}
         <div style="margin-top: 0.5rem; font-size: 0.8rem; font-style: italic; color: var(--dim);">

@@ -15,8 +15,10 @@
         <div>
             <h1>{{ wallpaper.title }}</h1>
             <div style="margin-bottom: 1rem; color: var(--dim);">
-                Uploaded by <a href="{{ url_for('main.user_profile', username=wallpaper.uploader.username) }}">@{{
-                    wallpaper.uploader.username }}</a>
+                Uploaded by <a href="{{ url_for('main.user_profile', username=wallpaper.uploader.username) }}"
+                    class="{{ 'admin-username' if wallpaper.uploader.is_admin else '' }}">
+                    @{{ wallpaper.uploader.username }}
+                </a>
                 on {{ wallpaper.timestamp.strftime('%B %d, %Y') }}
             </div>
 
@@ -29,9 +31,21 @@
                 {% endfor %}
             </div>
 
-            <a href="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" download class="btn">
-                Download Original
-            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" download class="btn">
+                    Download Original
+                </a>
+
+                {% if current_user.is_authenticated and (current_user.id == wallpaper.user_id or current_user.is_admin)
+                %}
+                <form action="{{ url_for('main.delete_wallpaper', wallpaper_id=wallpaper.id) }}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this wallpaper? This cannot be undone.');">
+                    <button type="submit" class="btn" style="border-color: var(--error); color: var(--error);">
+                        Delete Wallpaper
+                    </button>
+                </form>
+                {% endif %}
+            </div>
         </div>
 
         <!-- Stats or other info could go here -->

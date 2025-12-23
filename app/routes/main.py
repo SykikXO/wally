@@ -162,6 +162,37 @@ def wallpaper_detail(slug):
     return render_template('wallpaper.html', wallpaper=wallpaper, similar_wallpapers=similar_wallpapers)
 
 
+@bp.route('/wallpaper/<int:wallpaper_id>/delete', methods=['POST'])
+@login_required
+def delete_wallpaper(wallpaper_id):
+    wallpaper = Wallpaper.query.get_or_404(wallpaper_id)
+    
+    # Check ownership or admin status
+    if wallpaper.user_id != current_user.id and not current_user.is_admin:
+        abort(403)
+        
+    # Delete files from filesystem
+    upload_folder = current_app.config['UPLOAD_FOLDER']
+    
+    # Delete original
+    original_path = os.path.join(upload_folder, wallpaper.filename)
+    if os.path.exists(original_path):
+        os.remove(original_path)
+        
+    # Delete thumbnail if it exists
+    if wallpaper.thumbnail_filename:
+        thumb_path = os.path.join(upload_folder, wallpaper.thumbnail_filename)
+        if os.path.exists(thumb_path):
+            os.remove(thumb_path)
+            
+    # Remove from database
+    db.session.delete(wallpaper)
+    db.session.commit()
+    
+    flash('Wallpaper deleted successfully.')
+    return redirect(url_for('main.user_profile', username=current_user.username))
+
+
 
 @bp.route('/<username>')
 def user_profile(username):

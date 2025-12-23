@@ -252,6 +252,23 @@
         .close-search:hover {
             color: var(--accent);
         }
+
+        .admin-username {
+            color: var(--error) !important;
+            font-weight: bold;
+        }
+
+        .admin-label {
+            background: var(--error);
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 2px;
+            font-weight: bold;
+            font-style: normal;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
     </style>
 </head>
 
@@ -363,12 +380,22 @@
         // Grid Multiple Enforcement
         function enforceGridMultiple() {
             const grids = document.querySelectorAll('.grid');
+            const sentinel = document.getElementById('loading-sentinel');
+            const paginationData = document.getElementById('pagination-data');
+
+            // If we are at the end of the content (no sentinel or hasNext is false)
+            // then we SHOULD show all remaining items.
+            let hasMore = !!sentinel;
+            if (paginationData && paginationData.dataset.hasNext === 'false') {
+                hasMore = false;
+            }
+
             grids.forEach(grid => {
                 const style = getComputedStyle(grid);
                 const gridCols = style.getPropertyValue('grid-template-columns').split(' ').length;
                 const cards = Array.from(grid.children);
 
-                if (gridCols <= 1) {
+                if (gridCols <= 1 || !hasMore) {
                     cards.forEach(card => card.style.display = '');
                     return;
                 }
