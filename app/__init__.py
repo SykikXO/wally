@@ -23,6 +23,11 @@ def create_app(config_class=Config):
     app.cli.add_command(load_wallpapers_command)
     app.cli.add_command(make_admin_command)
 
+    # Ensure upload directories exist
+    import os
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(app.config['QUARANTINE_FOLDER'], exist_ok=True)
+
     return app
 
 

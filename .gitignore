@@ -70,6 +70,9 @@ app/static/uploads/*
 !app/static/uploads/61a7c59168644507bde36deff0f3f271.png
 !app/static/uploads/fe95428c9827402886b6e4a94ab51adc.png
 
+app/static/quarantine/*
+!app/static/quarantine/.gitkeep
+
 # OS
 .DS_Store
 Thumbs.db
