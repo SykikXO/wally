@@ -96,12 +96,17 @@ def upload():
 @bp.route('/', methods=['GET'])
 def index():
     page = request.args.get('page', 1, type=int)
-    wallpapers = Wallpaper.query.filter_by(status='active').order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=20, error_out=False)
+    # Use 24 as it is divisible by 2, 3, 4, 6, 8, 12 for better grid filling
+    pagination = Wallpaper.query.filter_by(status='active').order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=24, error_out=False)
+    wallpapers = pagination.items
     
-    next_url = url_for('main.index', page=wallpapers.next_num) if wallpapers.has_next else None
-    prev_url = url_for('main.index', page=wallpapers.prev_num) if wallpapers.has_prev else None
+    if request.args.get('load_more'):
+        return render_template('partials/wallpaper_grid_items.html', wallpapers=wallpapers)
 
-    return render_template('index.html', title='Home', wallpapers=wallpapers.items, next_url=next_url, prev_url=prev_url)
+    next_url = url_for('main.index', page=pagination.next_num) if pagination.has_next else None
+    prev_url = url_for('main.index', page=pagination.prev_num) if pagination.has_prev else None
+
+    return render_template('index.html', title='Home', wallpapers=wallpapers, has_next=pagination.has_next, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/search', methods=['GET'])
 def search():
@@ -109,16 +114,23 @@ def search():
     if not query:
         return redirect(url_for('main.index'))
     
-    # Search in title or tags
-    wallpapers = Wallpaper.query.filter(
+    page = request.args.get('page', 1, type=int)
+    
+    # Search in title or tags with pagination
+    pagination = Wallpaper.query.filter(
         Wallpaper.status == 'active',
         or_(
             Wallpaper.title.ilike(f'%{query}%'),
             Wallpaper.tags.any(Tag.name.ilike(f'%{query}%'))
         )
-    ).order_by(Wallpaper.timestamp.desc()).all()
+    ).order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=24, error_out=False)
+    
+    wallpapers = pagination.items
 
-    return render_template('index.html', title=f'Search: {query}', wallpapers=wallpapers)
+    if request.args.get('load_more'):
+        return render_template('partials/wallpaper_grid_items.html', wallpapers=wallpapers)
+
+    return render_template('index.html', title=f'Search: {query}', wallpapers=wallpapers, has_next=pagination.has_next)
 
 @bp.route('/wallpaper/<string:slug>')
 def wallpaper_detail(slug):
@@ -162,7 +174,7 @@ def user_profile(username):
     page = request.args.get('page', 1, type=int)
     is_own_profile = current_user.is_authenticated and current_user.id == user.id
     
-    pagination = user.wallpapers.filter_by(status='active').order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=10, error_out=False)
+    pagination = user.wallpapers.filter_by(status='active').order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=24, error_out=False)
     wallpapers = pagination.items
 
     if request.args.get('load_more'):

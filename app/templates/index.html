@@ -3,50 +3,84 @@
 {% block content %}
 <h2 style="margin-top: 0;">Latest Uploads</h2>
 
-<div class="grid">
-    {% for wallpaper in wallpapers %}
-    <div class="card">
-        <a href="{{ url_for('main.wallpaper_detail', slug=wallpaper.slug) }}">
-            {% if wallpaper.thumbnail_filename %}
-            <img src="{{ url_for('static', filename='uploads/' + wallpaper.thumbnail_filename) }}"
-                alt="{{ wallpaper.title }}">
-            {% else %}
-            <img src="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" alt="{{ wallpaper.title }}">
-            {% endif %}
-        </a>
-        <div style="padding: 0.5rem 0.25rem;">
-
-            <!-- <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ wallpaper.title }}</div> -->
-            <div class="card-meta">
-
-                <span>by @{{ wallpaper.uploader.username }}</span>
-                <span>{{ wallpaper.timestamp.strftime('%Y-%m-%d') }}</span>
-            </div>
-            {% if wallpaper.tags %}
-            <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
-                {% for tag in wallpaper.tags %}
-                <span style="font-size: 0.7rem; background: var(--border); padding: 0.1rem 0.4rem; border-radius: 4px;">
-                    {{ tag.name }}
-                </span>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-        </div>
-    </div>
-    {% else %}
-    <p>No wallpapers found. Be the first to <a href="{{ url_for('main.upload') }}">upload</a>!</p>
-    {% endfor %}
+<div class="grid" id="wallpaper-grid">
+    {% include 'partials/wallpaper_grid_items.html' %}
 </div>
 
-{% if prev_url or next_url %}
-<div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem;">
-    {% if prev_url %}
-    <a href="{{ prev_url }}">&larr; Newer</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older &rarr;</a>
-    {% endif %}
+{% if has_next %}
+<div id="loading-sentinel" style="text-align: center; padding: 2rem; color: var(--dim);">
+    Loading more...
 </div>
 {% endif %}
+
+<div id="pagination-data" data-has-next="{{ 'true' if has_next else 'false' }}" data-current-path="{{ request.path }}"
+    style="display: none;"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginationData = document.getElementById('pagination-data');
+        if (!paginationData) return;
+
+        let page = 1;
+        let hasNext = paginationData.dataset.hasNext === 'true';
+        const currentPath = paginationData.dataset.currentPath;
+        let isLoading = false;
+
+        const sentinel = document.getElementById('loading-sentinel');
+        const grid = document.getElementById('wallpaper-grid');
+
+        if (!sentinel) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasNext && !isLoading) {
+                loadMore();
+            }
+        }, { rootMargin: '200px' });
+
+        observer.observe(sentinel);
+
+        async function loadMore() {
+            isLoading = true;
+            page++;
+
+            try {
+                // Determine if there's an existing query (like search)
+                const urlObj = new URL(window.location.href);
+                urlObj.searchParams.set('page', page);
+                urlObj.searchParams.set('load_more', '1');
+
+                const response = await fetch(urlObj.toString());
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const html = await response.text();
+
+                if (html.trim().length === 0) {
+                    hasNext = false;
+                    sentinel.style.display = 'none';
+                    return;
+                }
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+
+                if (tempDiv.children.length === 0) {
+                    hasNext = false;
+                    sentinel.style.display = 'none';
+                    return;
+                }
+
+                while (tempDiv.firstChild) {
+                    grid.appendChild(tempDiv.firstChild);
+                }
+
+            } catch (error) {
+                console.error('Error loading more wallpapers:', error);
+                hasNext = false;
+                sentinel.textContent = 'Error loading more items.';
+            } finally {
+                isLoading = false;
+            }
+        }
+    });
+</script>
 {% endblock %}
