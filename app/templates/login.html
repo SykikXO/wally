@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <h2>Login</h2>
+    <form action="" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input style="letter-spacing: 0.4rem;" type="password" name="password" id="password" required>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <input type="checkbox" name="remember_me" id="remember_me" style="width: auto; margin: 0;">
+            <label for="remember_me">Remember me</label>
+        </div>
+        <button type="submit" class="btn">Enter</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+        New here? <a href="{{ url_for('auth.register') }}">Register</a>
+    </p>
+</div>
+{% endblock %}

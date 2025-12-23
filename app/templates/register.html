@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <h2>Register</h2>
+    <form action="" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" required>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input style="letter-spacing: 0.4rem;" type="password" name="password" id="password" required>
+        </div>
+        <button type="submit" class="btn">Join</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+        Already have an account? <a href="{{ url_for('auth.login') }}">Login</a>
+    </p>
+</div>
+{% endblock %}

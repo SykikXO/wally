@@ -1,0 +1,27 @@
+{% for wallpaper in wallpapers %}
+<div class="card fade-in">
+    <a href="{{ url_for('main.wallpaper_detail', slug=wallpaper.slug) }}">
+        {% if wallpaper.thumbnail_filename %}
+        <img src="{{ url_for('static', filename='uploads/' + wallpaper.thumbnail_filename) }}"
+            alt="{{ wallpaper.title }}" loading="lazy">
+        {% else %}
+        <img src="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" alt="{{ wallpaper.title }}"
+            loading="lazy">
+        {% endif %}
+    </a>
+    <div style="padding: 0.5rem;">
+        <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ wallpaper.title }}</div>
+        <div class="card-meta">
+            <span>{{ wallpaper.timestamp.strftime('%Y-%m-%d') }}</span>
+        </div>
+        {% if wallpaper.tags %}
+        <div style="margin-top: 0.5rem; font-size: 0.8rem; font-style: italic; color: var(--dim);">
+            <!-- Tags display could be improved here, currently string repr -->
+            {% for tag in wallpaper.tags %}
+            #{{ tag.name }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

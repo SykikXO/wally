@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="margin-top: 0;">Latest Uploads</h2>
+
+<div class="grid">
+    {% for wallpaper in wallpapers %}
+    <div class="card">
+        <a href="{{ url_for('main.wallpaper_detail', slug=wallpaper.slug) }}">
+            {% if wallpaper.thumbnail_filename %}
+            <img src="{{ url_for('static', filename='uploads/' + wallpaper.thumbnail_filename) }}"
+                alt="{{ wallpaper.title }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" alt="{{ wallpaper.title }}">
+            {% endif %}
+        </a>
+        <div style="padding: 0.5rem 0.25rem;">
+
+            <!-- <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ wallpaper.title }}</div> -->
+            <div class="card-meta">
+
+                <span>by @{{ wallpaper.uploader.username }}</span>
+                <span>{{ wallpaper.timestamp.strftime('%Y-%m-%d') }}</span>
+            </div>
+            {% if wallpaper.tags %}
+            <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                {% for tag in wallpaper.tags %}
+                <span style="font-size: 0.7rem; background: var(--border); padding: 0.1rem 0.4rem; border-radius: 4px;">
+                    {{ tag.name }}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+    {% else %}
+    <p>No wallpapers found. Be the first to <a href="{{ url_for('main.upload') }}">upload</a>!</p>
+    {% endfor %}
+</div>
+
+{% if prev_url or next_url %}
+<div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem;">
+    {% if prev_url %}
+    <a href="{{ prev_url }}">&larr; Newer</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Older &rarr;</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

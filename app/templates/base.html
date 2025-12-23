@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wally</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --fg: #d0d0d0;
+            --accent: #ffffff;
+            --dim: #666666;
+            --error: #ff4444;
+        }
+
+        /* Iosevka is preferred, fallback to JetBrains Mono or generic monospace */
+        body {
+            font-family: 'Iosevka', 'JetBrains Mono', monospace;
+            background-color: var(--bg);
+            color: var(--fg);
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        a {
+            color: var(--fg);
+            text-decoration: none;
+            font-style: italic;
+        }
+
+        a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--dim);
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            font-style: italic;
+            margin: 0;
+            color: var(--accent);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            min-height: 60vh;
+        }
+
+        .btn {
+            display: inline-block;
+            border: 1px solid var(--fg);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            background: transparent;
+            color: var(--fg);
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"] {
+            background: transparent;
+            border: 1px solid var(--dim);
+            color: var(--accent);
+            padding: 0.5rem;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            border: 1px solid var(--dim);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card a {
+            display: block;
+            height: 250px;
+            /* Fixed height for the image container */
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Zoom in/crop to fill */
+            display: block;
+            filter: grayscale(20%);
+            transition: filter 0.3s;
+        }
+
+        .card img:hover {
+            filter: grayscale(0%);
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: var(--dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Icon Styles */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .material-symbols-rounded {
+            font-variation-settings:
+                'FILL' 1,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24;
+            font-size: 1.2rem;
+        }
+
+
+        .flash {
+            padding: 1rem;
+            border: 1px solid var(--accent);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--dim);
+            border-top: 1px dashed var(--dim);
+            padding-top: 1rem;
+        }
+
+        /* Search Overlay Styles */
+        #search-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-container h2 {
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .close-search {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dim);
+        }
+
+        .close-search:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="{{ url_for('main.index') }}">Wally</a></h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('main.search') }}" id="search-trigger" class="nav-link">
+                        <span class="material-symbols-rounded">search</span>
+                        Search
+                    </a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{ url_for('main.upload') }}" class="nav-link">
+                        <span class="material-symbols-rounded">upload_file</span>
+                        Upload
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('main.user_profile', username=current_user.username) }}" class="nav-link">
+                        <span class="material-symbols-rounded">account_circle</span>
+                        @{{ current_user.username }}
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('auth.login') }}" class="nav-link">
+                        <span class="material-symbols-rounded">login</span>
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.register') }}" class="nav-link">
+                        <span class="material-symbols-rounded">person_add</span>
+                        Register
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer">
+        <i>wally v1.0</i>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay">
+        <span class="close-search" id="search-close">&times;</span>
+        <div class="search-container">
+            <h2>Search Wallpapers</h2>
+            <form action="{{ url_for('main.search') }}" method="get" style="display: flex; gap: 1rem;">
+                <input type="text" name="q" id="search-input" placeholder="Type to search..." style="margin-bottom: 0;">
+                <button type="submit" class="btn">Search</button>
+            </form>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--dim);">Press <i>Esc</i> to close</p>
+        </div>
+    </div>
+
+    <script>
+        const searchTrigger = document.getElementById('search-trigger');
+        const searchOverlay = document.getElementById('search-overlay');
+        const searchClose = document.getElementById('search-close');
+        const searchInput = document.getElementById('search-input');
+
+        function openSearch(e) {
+            if (e) e.preventDefault();
+            searchOverlay.style.display = 'flex';
+            searchInput.focus();
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeSearch() {
+            searchOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        searchTrigger.addEventListener('click', openSearch);
+        searchClose.addEventListener('click', closeSearch);
+
+        // Close on click outside container
+        searchOverlay.addEventListener('click', (e) => {
+            if (e.target === searchOverlay) closeSearch();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSearch();
+            // Optional: '/' to open search
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                openSearch(e);
+            }
+        });
+    </script>
+</body>
+
+</html>

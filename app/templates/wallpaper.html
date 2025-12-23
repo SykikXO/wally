@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; gap: 2rem;">
+    <!-- Wallpaper Preview & Action -->
+    <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+        <a href="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" alt="{{ wallpaper.title }}"
+                style="width: 100%; display: block; max-height: 80vh; object-fit: contain; background: black;">
+        </a>
+    </div>
+
+    <!-- Metadata -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div>
+            <h1>{{ wallpaper.title }}</h1>
+            <div style="margin-bottom: 1rem; color: var(--dim);">
+                Uploaded by <a href="{{ url_for('main.user_profile', username=wallpaper.uploader.username) }}">@{{
+                    wallpaper.uploader.username }}</a>
+                on {{ wallpaper.timestamp.strftime('%B %d, %Y') }}
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem;">
+                {% for tag in wallpaper.tags %}
+                <a href="{{ url_for('main.search', q=tag.name) }}"
+                    style="background: var(--border); padding: 0.2rem 0.6rem; border-radius: 4px; text-decoration: none; color: var(--fg); font-size: 0.9rem;">
+                    #{{ tag.name }}
+                </a>
+                {% endfor %}
+            </div>
+
+            <a href="{{ url_for('static', filename='uploads/' + wallpaper.filename) }}" download class="btn">
+                Download Original
+            </a>
+        </div>
+
+        <!-- Stats or other info could go here -->
+    </div>
+
+    <!-- Similar Wallpapers -->
+    {% if similar_wallpapers %}
+    <div style="margin-top: 2rem;">
+        <h3>Similar Wallpapers</h3>
+        <div class="grid">
+            {% for sim in similar_wallpapers %}
+            <div class="card">
+                <a href="{{ url_for('main.wallpaper_detail', slug=sim.slug) }}">
+                    {% if sim.thumbnail_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + sim.thumbnail_filename) }}"
+                        alt="{{ sim.title }}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='uploads/' + sim.filename) }}" alt="{{ sim.title }}">
+                    {% endif %}
+                </a>
+                <div style="padding: 0.5rem;">
+                    <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ sim.title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

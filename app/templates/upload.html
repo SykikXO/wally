@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <h2>Upload Wallpaper</h2>
+    <form action="" method="post" enctype="multipart/form-data" id="uploadForm"
+        style="background: var(--card-bg); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
+        <div style="margin-bottom: 1rem;">
+            <label for="file" style="display: block; margin-bottom: 0.5rem;">Choose Wallpapers (Max 10, Total
+                300MB)</label>
+            <input type="file" name="file" id="file" accept="image/*" multiple required>
+            <div id="fileError" style="color: var(--accent); margin-top: 0.5rem; font-size: 0.9rem;"></div>
+        </div>
+        <div>
+            <label for="tags">Tags (comma separated)</label>
+            <input type="text" name="tags" id="tags" placeholder="e.g. nature, dark, 4k">
+        </div>
+
+        <!-- Optional Title override (applied to all if set, default uses filename) -->
+        <!-- <div>
+            <label for="title">Title (Optional override)</label>
+            <input type="text" name="title" id="title">
+        </div> -->
+
+        <button type="submit" class="btn">Upload</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('file');
+        const errorDiv = document.getElementById('fileError');
+        const MAX_FILES = 10;
+        const MAX_SIZE_BYTES = 300 * 1024 * 1024; // 300MB
+        const IS_ADMIN = {{ 'true' if current_user.is_admin else 'false' }};
+
+        form.addEventListener('submit', function (e) {
+            errorDiv.textContent = '';
+
+            if (IS_ADMIN) return;
+
+            const files = fileInput.files;
+
+            if (files.length > MAX_FILES) {
+                e.preventDefault();
+                errorDiv.textContent = `You can only upload a maximum of ${MAX_FILES} files at a time.`;
+                return;
+            }
+
+
+            let totalSize = 0;
+            for (let i = 0; i < files.length; i++) {
+                totalSize += files[i].size;
+            }
+
+            if (totalSize > MAX_SIZE_BYTES) {
+                e.preventDefault();
+                errorDiv.textContent = `Total file size exceeds 300MB. Current: ${(totalSize / (1024 * 1024)).toFixed(2)}MB`;
+                return;
+            }
+        });
+    </script>
+
+</div>
+{% endblock %}

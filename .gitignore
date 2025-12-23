@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Flask/Database
+instance/
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# Project Specific
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+*.code-workspace
+
+# Test artifacts
+ai_test.png
+debug_*.py
+verify_*.py
+test_*.py
+testtags.py
