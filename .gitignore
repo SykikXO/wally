@@ -19,8 +19,6 @@ instance/
 app/static/uploads/*
 !app/static/uploads/.gitkeep
 !app/static/uploads/thumb_*.webp
-!app/static/uploads/94cd2aa5b87a4c7c860eeb55a46bbff3.png
-!app/static/uploads/4fb2ce4966b644b1a03d14413a672fec.png
 !app/static/uploads/aaafb7c0212f40738e7f1fa5e042fb44.jpg
 !app/static/uploads/27c0f3aab03c4fce89039c6302f8cb57.jpg
 !app/static/uploads/dfb9ac01b97c4a599b04701e5e3629ba.jpg
