@@ -32,7 +32,7 @@ def create_app(config_class=Config):
     # Register error handlers
     @app.errorhandler(404)
     def not_found_error(error):
-        return render_template('errors/error.html', code=404, title="Page Not Found", message="The wallpaper you're looking for seems to have vanished into the void."), 404
+        return render_template('errors/error.html', code=404, title="Page Not Found", message="What you're looking for seems to have vanished into the void."), 404
 
     @app.errorhandler(500)
     def internal_error(error):
