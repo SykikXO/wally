@@ -21,76 +21,14 @@
     {% include 'partials/wallpaper_grid_items.html' %}
 </div>
 
-{% if has_next %}
-<div id="loading-sentinel" style="text-align: center; padding: 2rem; color: var(--dim);">
-    Loading more...
+{% if prev_url or next_url %}
+<div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem;">
+    {% if prev_url %}
+    <a href="{{ prev_url }}">&larr; Newer</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Older &rarr;</a>
+    {% endif %}
 </div>
 {% endif %}
-
-<div id="pagination-data" data-has-next="{{ 'true' if has_next else 'false' }}" data-current-path="{{ request.path }}"
-    style="display: none;"></div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const paginationData = document.getElementById('pagination-data');
-        if (!paginationData) return;
-
-        let page = 1;
-        let hasNext = paginationData.dataset.hasNext === 'true';
-        const currentPath = paginationData.dataset.currentPath;
-        let isLoading = false;
-
-        const sentinel = document.getElementById('loading-sentinel');
-        const grid = document.getElementById('wallpaper-grid');
-
-        if (!sentinel) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasNext && !isLoading) {
-                loadMore();
-            }
-        }, { rootMargin: '200px' });
-
-        observer.observe(sentinel);
-
-        async function loadMore() {
-            isLoading = true;
-            page++;
-
-            try {
-                const url = `${currentPath}?page=${page}&load_more=1`;
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Network response was not ok');
-
-                const html = await response.text();
-
-                if (html.trim().length === 0) {
-                    hasNext = false;
-                    sentinel.style.display = 'none';
-                    return;
-                }
-
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-
-                if (tempDiv.children.length === 0) {
-                    hasNext = false;
-                    sentinel.style.display = 'none';
-                    return;
-                }
-
-                while (tempDiv.firstChild) {
-                    grid.appendChild(tempDiv.firstChild);
-                }
-
-            } catch (error) {
-                console.error('Error loading more wallpapers:', error);
-                hasNext = false;
-                sentinel.textContent = 'Error loading more items.';
-            } finally {
-                isLoading = false;
-            }
-        }
-    });
-</script>
 {% endblock %}

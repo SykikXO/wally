@@ -177,8 +177,7 @@ def user_profile(username):
     pagination = user.wallpapers.filter_by(status='active').order_by(Wallpaper.timestamp.desc()).paginate(page=page, per_page=24, error_out=False)
     wallpapers = pagination.items
 
-    if request.args.get('load_more'):
-        # Return only the cards HTML
-        return render_template('partials/wallpaper_grid_items.html', wallpapers=wallpapers)
+    next_url = url_for('main.user_profile', username=username, page=pagination.next_num) if pagination.has_next else None
+    prev_url = url_for('main.user_profile', username=username, page=pagination.prev_num) if pagination.has_prev else None
     
-    return render_template('profile.html', user=user, wallpapers=wallpapers, has_next=pagination.has_next, is_own_profile=is_own_profile)
+    return render_template('profile.html', user=user, wallpapers=wallpapers, next_url=next_url, prev_url=prev_url, is_own_profile=is_own_profile)
