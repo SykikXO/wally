@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from app.extensions import db, migrate, login_manager
 from flask import render_template
+import threading
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -38,6 +39,12 @@ def create_app(config_class=Config):
     def internal_error(error):
         db.session.rollback()
         return render_template('errors/error.html', code=500, title="Server Error", message="Something went wrong on our end. We're dispatching a digital cleanup crew."), 500
+
+    # Start background maintenance thread if not in debug mode
+    if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        from maintainance import run_maintenance_loop
+        thread = threading.Thread(target=run_maintenance_loop, args=(app,), daemon=True)
+        thread.start()
 
     return app
 

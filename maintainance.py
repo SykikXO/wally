@@ -179,5 +179,35 @@ def main():
             # Small yield to prevent 100% single-core thrashing if load average lags
             time.sleep(0.5)
 
+def run_maintenance_loop(app):
+    """
+    Function to be run in a background thread within the Flask app.
+    """
+    log_message("Starting background maintenance thread...")
+    last_cleanup = 0
+    
+    while True:
+        try:
+            # On Render/Production, load might not be as reliable to check via getloadavg
+            # but we keep it for consistency.
+            work_done = False
+            
+            if process_single_quarantine(app):
+                work_done = True
+            elif process_single_tagging(app):
+                work_done = True
+            elif time.time() - last_cleanup > 3600:
+                run_cleanup(app)
+                last_cleanup = time.time()
+                work_done = True
+                
+            if not work_done:
+                time.sleep(SLEEP_IDLE)
+            else:
+                time.sleep(1) # Small rest between items
+        except Exception as e:
+            log_message(f"Maintenance thread error: {e}")
+            time.sleep(SLEEP_IDLE)
+
 if __name__ == '__main__':
     main()

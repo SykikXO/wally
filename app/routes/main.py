@@ -68,6 +68,8 @@ def upload():
                     uploader=current_user
                 )
                 
+                db.session.add(wallpaper)
+
                 # Handle tags (stored even when pending)
                 if tags_str:
                     tag_names = [t.strip().lower() for t in tags_str.split(',') if t.strip()]
@@ -78,7 +80,6 @@ def upload():
                             db.session.add(tag)
                         wallpaper.tags.append(tag)
 
-                db.session.add(wallpaper)
                 uploaded_count += 1
         
         db.session.commit()
