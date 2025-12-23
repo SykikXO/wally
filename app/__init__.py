@@ -41,7 +41,7 @@ def create_app(config_class=Config):
         return render_template('errors/error.html', code=500, title="Server Error", message="Something went wrong on our end. We're dispatching a digital cleanup crew."), 500
 
     # Start background maintenance thread if not in debug mode
-    if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    if (not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true') and not os.environ.get('SKIP_MAINTENANCE'):
         from maintainance import run_maintenance_loop
         thread = threading.Thread(target=run_maintenance_loop, args=(app,), daemon=True)
         thread.start()

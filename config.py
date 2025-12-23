@@ -10,4 +10,10 @@ class Config:
     QUARANTINE_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app/static/quarantine')
     # MAX_CONTENT_LENGTH = 300 * 1024 * 1024  # Disabled to allow admin bypass in route
 
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'connect_args': {
+            'timeout': 30
+        }
+    }
+
 

@@ -4,26 +4,24 @@
 <div style="max-width: 500px; margin: 0 auto;">
     <h2>Upload Wallpaper</h2>
     <form action="" method="post" enctype="multipart/form-data" id="uploadForm"
-        style="background: var(--card-bg); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
-        <div style="margin-bottom: 1rem;">
-            <label for="file" style="display: block; margin-bottom: 0.5rem;">Choose Wallpapers (Max 10, Total
-                300MB)</label>
+        style="background: transparent; padding: 2rem; border: 1px dashed var(--dim); margin-top: 2rem;">
+        <div style="margin-bottom: 2rem;">
+            <label for="file" style="display: block; margin-bottom: 0.8rem; font-weight: bold;">Choose
+                Wallpapers</label>
+            <p style="font-size: 0.8rem; color: var(--dim); margin-bottom: 1rem;">Max 10 files, 300MB total</p>
             <input type="file" name="file" id="file" accept="image/*" multiple required>
-            <div id="fileError" style="color: var(--accent); margin-top: 0.5rem; font-size: 0.9rem;"></div>
-        </div>
-        <div>
-            <label for="tags">Tags (comma separated)</label>
-            <input type="text" name="tags" id="tags" placeholder="e.g. nature, dark, 4k">
+            <div id="fileError" style="color: var(--error); margin-top: 0.5rem; font-size: 0.9rem;"></div>
         </div>
 
-        <!-- Optional Title override (applied to all if set, default uses filename) -->
-        <!-- <div>
-            <label for="title">Title (Optional override)</label>
-            <input type="text" name="title" id="title">
-        </div> -->
+        <div style="margin-bottom: 2rem;">
+            <label for="tags" style="display: block; margin-bottom: 0.8rem; font-weight: bold;">Tags</label>
+            <input type="text" name="tags" id="tags" placeholder="nature, dark, 4k" style="margin-bottom: 0;">
+            <p style="font-size: 0.8rem; color: var(--dim); margin-top: 0.5rem;">Separated by commas</p>
+        </div>
 
-        <button type="submit" class="btn">Upload</button>
+        <button type="submit" class="btn" style="width: 100%;">Upload to Library</button>
     </form>
+
 
     <script>
         const form = document.getElementById('uploadForm');
@@ -31,7 +29,7 @@
         const errorDiv = document.getElementById('fileError');
         const MAX_FILES = 10;
         const MAX_SIZE_BYTES = 300 * 1024 * 1024; // 300MB
-        const IS_ADMIN = {{ 'true' if current_user.is_admin else 'false' }};
+        const IS_ADMIN = JSON.parse('{{ current_user.is_admin }}');
 
         form.addEventListener('submit', function (e) {
             errorDiv.textContent = '';
