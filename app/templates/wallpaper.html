@@ -56,21 +56,9 @@
     <div style="margin-top: 2rem;">
         <h3>Similar Wallpapers</h3>
         <div class="grid">
-            {% for sim in similar_wallpapers %}
-            <div class="card">
-                <a href="{{ url_for('main.wallpaper_detail', slug=sim.slug) }}">
-                    {% if sim.thumbnail_filename %}
-                    <img src="{{ url_for('static', filename='uploads/' + sim.thumbnail_filename) }}"
-                        alt="{{ sim.title }}">
-                    {% else %}
-                    <img src="{{ url_for('static', filename='uploads/' + sim.filename) }}" alt="{{ sim.title }}">
-                    {% endif %}
-                </a>
-                <div style="padding: 0.5rem;">
-                    <div style="font-weight: bold; margin-bottom: 0.25rem;">{{ sim.title }}</div>
-                </div>
-            </div>
-            {% endfor %}
+            {% with wallpapers = similar_wallpapers %}
+            {% include 'partials/wallpaper_grid_items.html' %}
+            {% endwith %}
         </div>
     </div>
     {% endif %}
