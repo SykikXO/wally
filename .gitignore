@@ -7,15 +7,68 @@ venv/
 
 # Flask/Database
 instance/
-*.db
-*.sqlite
+# Allow app.db for demo
+# *.db
+# *.sqlite
 
 # Logs
 *.log
 
 # Project Specific
+# Allow curated assets for demo
 app/static/uploads/*
 !app/static/uploads/.gitkeep
+!app/static/uploads/thumb_*.webp
+!app/static/uploads/94cd2aa5b87a4c7c860eeb55a46bbff3.png
+!app/static/uploads/4fb2ce4966b644b1a03d14413a672fec.png
+!app/static/uploads/aaafb7c0212f40738e7f1fa5e042fb44.jpg
+!app/static/uploads/27c0f3aab03c4fce89039c6302f8cb57.jpg
+!app/static/uploads/dfb9ac01b97c4a599b04701e5e3629ba.jpg
+!app/static/uploads/9d754116bae744aaa46590202fbc7784.png
+!app/static/uploads/d3d7f9a9c27c400eab3d14bc32ee8d61.png
+!app/static/uploads/b82b88fdf2e843658e79c943c120778b.jpg
+!app/static/uploads/eebb0259fce24dd8a7c5a6ea81c1fa34.png
+!app/static/uploads/e75fe864411047889bc2e60dc8870559.png
+!app/static/uploads/327060219958439fbed80aa046517369.jpg
+!app/static/uploads/730383a813e9411e9ae783d95e1653e0.png
+!app/static/uploads/83ffe589735546b2b84e94619db0aa5a.jpg
+!app/static/uploads/be183ca6863546e1b07684d562253788.jpg
+!app/static/uploads/87e4eab193aa4c0eb8ca55f9a0b13370.jpg
+!app/static/uploads/d348a6757a3540bab75ef384296ee509.jpg
+!app/static/uploads/0a05b3617fcc4f72b4cd172cdda2e211.jpg
+!app/static/uploads/b20893588b494611a4c07a72ff14d73d.jpg
+!app/static/uploads/ceb5edd471874f91a6c7da0a23a16e0e.jpg
+!app/static/uploads/f0c908a556da4d48894b0404525cf460.png
+!app/static/uploads/384aa0a9da6641d1853875444a102992.jpg
+!app/static/uploads/11ada98cd8984c9d908791b2f85bf44c.jpg
+!app/static/uploads/cdc17b7a0d964cd496673e50c624d539.jpg
+!app/static/uploads/edaf96a86bd94d758bb583f0c3ffd111.jpg
+!app/static/uploads/3ed021fc5ecc456fb6e55710e8081b2d.jpg
+!app/static/uploads/3fdf84e4b5104700b5b99bbd9f1c2055.jpg
+!app/static/uploads/7dec9b994a24d94a82472e2a699576b.jpg
+!app/static/uploads/456fd24053f94befba8ed9fc1aaa2d26.jpg
+!app/static/uploads/3e907c6dd7ec4fa088baba9aa9ca88f4.jpg
+!app/static/uploads/51b1691b42b1449ab0d273f2b9b9f00c.jpg
+!app/static/uploads/f17c77612a4b42db8c4988c32f6b5fab.jpg
+!app/static/uploads/189760a8864640798701935a42a34a7b.jpg
+!app/static/uploads/f9e431ff49a34127a9d8dadb7b9f25a5.jpg
+!app/static/uploads/6fff9075510c4955a19aa1605a39bbc6.jpg
+!app/static/uploads/379ae1e0d5f145fcaac10ad77e7eaec4.jpg
+!app/static/uploads/841e94db49c44d509c9d9f1aa8a0e317.jpg
+!app/static/uploads/0d5202df9bd74543b52665021626c1b2.jpg
+!app/static/uploads/6451ec23861a4a63bee5258aeb34e5f8.jpg
+!app/static/uploads/8e7c4a082cae411fb877ddc8452b0a55.jpg
+!app/static/uploads/f52c6c053ae84d0b83a9bc4a72e0c1c3.jpg
+!app/static/uploads/711e5506fde94977aba717b7415be589.jpg
+!app/static/uploads/17b79f870ef543a5beaf12e40771d0b0.jpg
+!app/static/uploads/20141905423b49e0aee2c3c857d15c12.jpg
+!app/static/uploads/7b736ccb3db043abbbc3eac64cd69410.png
+!app/static/uploads/2854168a4b5c4e9a9c22ded4f4998084.jpg
+!app/static/uploads/e5287a15c3c94bb5a422f7afe5341f8c.png
+!app/static/uploads/3a54b2570d044f138f51f89cc982ded7.png
+!app/static/uploads/2ff8ebb76a6a488b81cd631dcadbd452.jpg
+!app/static/uploads/61a7c59168644507bde36deff0f3f271.png
+!app/static/uploads/fe95428c9827402886b6e4a94ab51adc.png
 
 # OS
 .DS_Store
@@ -28,3 +81,4 @@ debug_*.py
 verify_*.py
 test_*.py
 testtags.py
+recent_50.txt
