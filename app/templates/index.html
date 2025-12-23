@@ -73,6 +73,10 @@
                     grid.appendChild(tempDiv.firstChild);
                 }
 
+                if (typeof enforceGridMultiple === 'function') {
+                    enforceGridMultiple();
+                }
+
             } catch (error) {
                 console.error('Error loading more wallpapers:', error);
                 hasNext = false;

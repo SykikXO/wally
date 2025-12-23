@@ -360,6 +360,32 @@
                 openSearch(e);
             }
         });
+        // Grid Multiple Enforcement
+        function enforceGridMultiple() {
+            const grids = document.querySelectorAll('.grid');
+            grids.forEach(grid => {
+                const style = getComputedStyle(grid);
+                const gridCols = style.getPropertyValue('grid-template-columns').split(' ').length;
+                const cards = Array.from(grid.children);
+
+                if (gridCols <= 1) {
+                    cards.forEach(card => card.style.display = '');
+                    return;
+                }
+
+                const totalToShow = cards.length - (cards.length % gridCols);
+                cards.forEach((card, index) => {
+                    if (index < totalToShow) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        window.addEventListener('load', enforceGridMultiple);
+        window.addEventListener('resize', enforceGridMultiple);
     </script>
 </body>
 
