@@ -50,7 +50,10 @@
 
 <p align="center">
   <img src="2025-12-24_05-51-48.png" alt="Homepage Screenshot" width="80%">
+  <br>
   <img src="2025-12-24_05-51-57.png" alt="User Profile Page Screenshot" width="80%">
+  <br>
   <img src="image.png" alt="Ollama Moondream and Gemma Automatically Tagging Images" width="80%">
+  <br>
   <img src="image-1.png" alt="Meanwhile My Tiny CPU" width="80%">
 </p>
