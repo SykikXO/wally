@@ -49,15 +49,8 @@
 - **AI Models**: Moondream, Gemma 3 on Ollama
 
 <p align="center">
-  <img src="2025-12-24_05-51-48.png" alt="Homepage" width="45%">
-  <img src="2025-12-24_05-51-57.png" alt="User Profile Page" width="45%">
-</p>
-
-<p align="center">
-  <img src="image-2.png" alt="Pushed Project to Render.com" width="80%">
-</p>
-
-<p align="center">
-  <img src="image.png" alt="Ollama Moondream and Gemma Automatically Tagging Images" width="45%">
-  <img src="image-1.png" alt="Meanwhile My Tiny CPU" width="45%">
+  <img src="2025-12-24_05-51-48.png" alt="Homepage Screenshot" width="80%">
+  <img src="2025-12-24_05-51-57.png" alt="User Profile Page Screenshot" width="80%">
+  <img src="image.png" alt="Ollama Moondream and Gemma Automatically Tagging Images" width="80%">
+  <img src="image-1.png" alt="Meanwhile My Tiny CPU" width="80%">
 </p>
